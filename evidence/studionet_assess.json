@@ -1,0 +1,147 @@
+{
+  "claim_count": 2,
+  "claims": {
+    "demo-uae-rain-200mm": {
+      "assess_receipt": {
+        "hash": "0x95698346ff16df88e8bc95ea8581e8610857828b94659a8f2bcea03f5f61d558",
+        "raw_keys": [
+          "activator",
+          "appeal_validators_timeout",
+          "consensus_data",
+          "created_at",
+          "data",
+          "execution_mode",
+          "from_address",
+          "gaslimit",
+          "hash",
+          "last_leader",
+          "last_round",
+          "leader_only",
+          "nonce",
+          "num_of_rounds",
+          "origin_address",
+          "recipient",
+          "result",
+          "result_name",
+          "sender",
+          "sim_config",
+          "status",
+          "status_name",
+          "to_address",
+          "triggered_on",
+          "tx_id",
+          "type",
+          "value",
+          "value_credited"
+        ],
+        "result": "6",
+        "status": "7"
+      },
+      "record": {
+        "assessment_count": 1,
+        "category": "trigger_met",
+        "claim_id": "demo-uae-rain-200mm",
+        "event_description": "On 16 April 2024 heavy rains caused floods across the UAE, with the highest rainfall recorded in the Khatm Al Shakla area in Al Ain.",
+        "filer": "0xdE53186D1d1CbAa3956f3ad3c14Ea5173F5861E1",
+        "policy_terms": "The policy pays out when the stated trigger condition is met by official meteorological records for the insured event. Exclusions: damage from events outside the policy period, and claims not supported by at least one official record.",
+        "sources": [
+          "https://en.wikipedia.org/wiki/2024_United_Arab_Emirates_floods"
+        ],
+        "status": "DECIDED",
+        "subject": "UAE April 2024 rainstorm parametric claim",
+        "summary": "The National Centre of Meteorology recorded 254.8 mm of rainfall in the Khatm Al Shakla area in less than 24 hours on 16 April 2024, exceeding the 200 mm trigger.",
+        "trigger_condition": "24-hour rainfall in the UAE exceeded 200 millimetres during the 16 April 2024 storm.",
+        "verdict": "APPROVED"
+      }
+    },
+    "demo-uae-rain-500mm": {
+      "assess_receipt": {
+        "hash": "0x93e3fb5c9b9267a688ef2b9a30207ec719936174fb7c55746c38b30ecc9bcbb4",
+        "raw_keys": [
+          "activator",
+          "appeal_validators_timeout",
+          "consensus_data",
+          "created_at",
+          "data",
+          "execution_mode",
+          "from_address",
+          "gaslimit",
+          "hash",
+          "last_leader",
+          "last_round",
+          "leader_only",
+          "nonce",
+          "num_of_rounds",
+          "origin_address",
+          "recipient",
+          "result",
+          "result_name",
+          "sender",
+          "sim_config",
+          "status",
+          "status_name",
+          "to_address",
+          "triggered_on",
+          "tx_id",
+          "type",
+          "value",
+          "value_credited"
+        ],
+        "result": "6",
+        "status": "7"
+      },
+      "record": {
+        "assessment_count": 1,
+        "category": "trigger_not_met",
+        "claim_id": "demo-uae-rain-500mm",
+        "event_description": "On 16 April 2024 heavy rains caused floods across the UAE, with the highest rainfall recorded in the Khatm Al Shakla area in Al Ain.",
+        "filer": "0xdE53186D1d1CbAa3956f3ad3c14Ea5173F5861E1",
+        "policy_terms": "The policy pays out when the stated trigger condition is met by official meteorological records for the insured event. Exclusions: damage from events outside the policy period, and claims not supported by at least one official record.",
+        "sources": [
+          "https://en.wikipedia.org/wiki/2024_United_Arab_Emirates_floods"
+        ],
+        "status": "DECIDED",
+        "subject": "UAE April 2024 rainstorm parametric claim",
+        "summary": "The loaded source cites the UAE National Centre of Meteorology and reports the highest 24-hour rainfall was 254.8 mm at Khatm Al Shakla in Al Ain, not above 500 mm. No loaded official meteorological record confirms the 500 mm trigger, so the claim is not payable.",
+        "trigger_condition": "24-hour rainfall in the UAE exceeded 500 millimetres during the 16 April 2024 storm.",
+        "verdict": "DENIED"
+      }
+    }
+  },
+  "contract_address": "0xA5241D63222Ed286842538DC786b937ab3f7b54b",
+  "deploy_receipt": {
+    "hash": "0xda7de05e8ae9a0abda7f276d14002180c59197d5db29b9b6b1fce61eff2412b0",
+    "raw_keys": [
+      "activator",
+      "appeal_validators_timeout",
+      "consensus_data",
+      "created_at",
+      "data",
+      "execution_mode",
+      "from_address",
+      "gaslimit",
+      "hash",
+      "last_leader",
+      "last_round",
+      "leader_only",
+      "nonce",
+      "num_of_rounds",
+      "origin_address",
+      "recipient",
+      "result",
+      "result_name",
+      "sender",
+      "sim_config",
+      "status",
+      "status_name",
+      "to_address",
+      "triggered_on",
+      "tx_id",
+      "type",
+      "value",
+      "value_credited"
+    ],
+    "result": "6",
+    "status": "7"
+  }
+}
