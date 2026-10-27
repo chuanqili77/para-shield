@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ParaShield — Parametric Claim Tribunal</title>
+    <meta
+      name="description"
+      content="Parametric insurance claims, judged on live measurements. File a claim with its policy terms, trigger condition and sources; GenLayer validators fetch them live and reach consensus on the verdict."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" crossorigin src="./assets/index-Dr5JW7mU.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-B0M91VNj.css">
+  </head>
+  <body>
+    <canvas id="weathermap" aria-hidden="true"></canvas>
+    <div class="scanlines" aria-hidden="true"></div>
+
+    <header class="hero">
+      <div class="radar" aria-hidden="true">
+        <span class="ring r1"></span>
+        <span class="ring r2"></span>
+        <span class="ring r3"></span>
+        <span class="sweep"></span>
+        <span class="blip b1"></span>
+        <span class="blip b2"></span>
+        <span class="blip b3"></span>
+      </div>
+      <div class="hero-text">
+        <p class="eyebrow">PARAMETRIC CLAIM TRIBUNAL · LIVE MEASUREMENT COURT</p>
+        <h1>ParaShield</h1>
+        <p class="tagline">
+          A parametric claim is a bet on a number. ParaShield makes the
+          number answerable: file the trigger, the policy terms and the
+          sources, and let GenLayer validators fetch the measurements
+          live and agree on the verdict — before anything is paid.
+        </p>
+      </div>
+      <div class="hero-stats">
+        <div><strong id="hero-count">–</strong><span>claims on docket</span></div>
+        <div><strong id="hero-approved">–</strong><span>approved</span></div>
+        <div><strong id="hero-denied">–</strong><span>denied</span></div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="panel connect-panel">
+        <button id="wallet-btn" class="btn cyan">Connect wallet</button>
+        <form id="contract-form" class="contract-form">
+          <label for="contract-address">Contract address</label>
+          <input id="contract-address" spellcheck="false" placeholder="0x…" />
+          <button class="btn ghost" type="submit">Load docket</button>
+          <button id="demo-btn" class="btn ghost" type="button">Use demo contract</button>
+          <a id="explorer-link" class="explorer" target="_blank" rel="noreferrer">View on explorer ↗</a>
+        </form>
+        <p id="chain-note" class="muted"></p>
+      </section>
+
+      <section class="panel">
+        <ol class="steps">
+          <li data-step="sign"><span>01</span> Sign</li>
+          <li data-step="sent"><span>02</span> Sent</li>
+          <li data-step="consensus"><span>03</span> Consensus</li>
+          <li data-step="final"><span>04</span> Sealed</li>
+        </ol>
+        <p id="tx-status" class="tx"></p>
+        <p id="error" class="error" hidden></p>
+      </section>
+
+      <section class="panel">
+        <div class="docket-head">
+          <h2>The Docket</h2>
+          <div class="filters" role="group" aria-label="Filter claims">
+            <button data-filter="ALL" aria-pressed="true">All</button>
+            <button data-filter="FILED" aria-pressed="false">Filed</button>
+            <button data-filter="APPROVED" aria-pressed="false">Approved</button>
+            <button data-filter="DENIED" aria-pressed="false">Denied</button>
+            <button data-filter="UNVERIFIED" aria-pressed="false">Unverified</button>
+          </div>
+          <button id="refresh-btn" class="btn ghost">Refresh docket</button>
+        </div>
+        <p class="ledger">
+          Total <strong id="count">–</strong> · Approved
+          <strong id="count-approved">–</strong> · Denied
+          <strong id="count-denied">–</strong> · Unverified
+          <strong id="count-unverified">–</strong>
+        </p>
+        <div id="claim-list" class="claim-list"></div>
+      </section>
+
+      <section class="panel dossier">
+        <h2>File a claim — the dossier</h2>
+        <p class="muted">
+          Describe the event, paste the policy terms and the trigger
+          condition exactly as written, and add 1–3 public sources that
+          carry the measurement. Validators judge only what those
+          sources show.
+        </p>
+        <form id="create-form" class="form-grid">
+          <label>Claim ID <span>≤ 64 chars, letters / digits / - / _</span>
+            <input id="f-id" required maxlength="64" placeholder="e.g. storm-2024-uae-rain" />
+          </label>
+          <label>Subject <span>1–128 chars</span>
+            <input id="f-subject" required maxlength="128" placeholder="e.g. Rainfall parametric policy, Al Ain station" />
+          </label>
+          <label class="wide">Event description <span>10–500 chars</span>
+            <textarea id="f-event" required maxlength="500" rows="3" placeholder="What happened, where, when."></textarea>
+          </label>
+          <label class="wide">Policy terms <span>10–1000 chars — include exclusions</span>
+            <textarea id="f-policy" required maxlength="1000" rows="3" placeholder="The coverage wording and any exclusion clauses."></textarea>
+          </label>
+          <label class="wide">Trigger condition <span>10–300 chars — the measurable threshold</span>
+            <input id="f-trigger" required maxlength="300" placeholder="e.g. 24-hour rainfall exceeded 200 millimetres during the storm." />
+          </label>
+          <label>Source 1 <span>required, https only</span>
+            <input id="f-s1" required placeholder="https://…" />
+          </label>
+          <label>Source 2 <span>optional</span>
+            <input id="f-s2" placeholder="https://…" />
+          </label>
+          <label>Source 3 <span>optional</span>
+            <input id="f-s3" placeholder="https://…" />
+          </label>
+          <button class="btn amber wide" type="submit">File claim on-chain</button>
+        </form>
+      </section>
+
+      <footer class="muted small">
+        ParaShield adjudicates claims; it does not pay them. Verdicts judge
+        the filed sources only. Stable Studionet · test network only, no
+        real funds.
+      </footer>
+    </main>
+
+  </body>
+</html>
