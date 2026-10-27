@@ -7,7 +7,7 @@ the gltest CLI path described in DEPLOY.md, to run them for real.
 No key is involved in this file.
 """
 
-CONTRACT_ADDRESS = "0x<deployed ParaShield address, see evidence/EVIDENCE.md>"
+CONTRACT_ADDRESS = "0xA5241D63222Ed286842538DC786b937ab3f7b54b"  # see evidence/EVIDENCE.md
 SOURCE = "https://en.wikipedia.org/wiki/2024_United_Arab_Emirates_floods"
 EVENT = (
     "On 16 April 2024 heavy rains caused floods across the UAE, with "
