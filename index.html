@@ -14,8 +14,8 @@
       href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <script type="module" crossorigin src="./assets/index-Dr5JW7mU.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-B0M91VNj.css">
+    <script type="module" crossorigin src="./assets/index-CO6aMohJ.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DsTTAknY.css">
   </head>
   <body>
     <canvas id="weathermap" aria-hidden="true"></canvas>
@@ -68,7 +68,9 @@
           <li data-step="consensus"><span>03</span> Consensus</li>
           <li data-step="final"><span>04</span> Sealed</li>
         </ol>
-        <p id="tx-status" class="tx"></p>
+        <p id="tx-status" class="tx" aria-live="polite"></p>
+        <p id="pending-note" class="muted" aria-live="polite"></p>
+        <button id="resume-btn" class="btn cyan" type="button">Resume pending transaction</button>
         <p id="error" class="error" hidden></p>
       </section>
 
