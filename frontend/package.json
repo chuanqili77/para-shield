@@ -1,1 +1,21 @@
-{"dependencies":{"genlayer-js":"^1.1.8"},"description":"ParaShield web app (Vite + genlayer-js)","devDependencies":{"vite":"^8.3.5"},"license":"ISC","name":"para-shield-frontend","scripts":{"build":"vite build","preview":"vite preview","verify":"node scripts/verify-frontend-call.mjs"},"version":"1.0.0"}
+{
+  "dependencies": {
+    "genlayer-js": "1.1.8",
+    "viem": "2.57.12"
+  },
+  "description": "ParaShield web app (Vite + genlayer-js)",
+  "devDependencies": {
+    "vite": "^8.3.5"
+  },
+  "license": "ISC",
+  "name": "para-shield-frontend",
+  "scripts": {
+    "build": "vite build",
+    "preview": "vite preview",
+    "verify": "node scripts/verify-frontend-call.mjs",
+    "test": "node --test src/recovery.test.js",
+    "verify:recovery": "node scripts/verify-recovery.mjs"
+  },
+  "version": "1.0.0",
+  "type": "module"
+}

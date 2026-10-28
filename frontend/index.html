@@ -66,7 +66,9 @@
           <li data-step="consensus"><span>03</span> Consensus</li>
           <li data-step="final"><span>04</span> Sealed</li>
         </ol>
-        <p id="tx-status" class="tx"></p>
+        <p id="tx-status" class="tx" aria-live="polite"></p>
+        <p id="pending-note" class="muted" aria-live="polite"></p>
+        <button id="resume-btn" class="btn cyan" type="button">Resume pending transaction</button>
         <p id="error" class="error" hidden></p>
       </section>
 

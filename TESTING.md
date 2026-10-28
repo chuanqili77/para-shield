@@ -92,3 +92,10 @@ contracts-dir config is None outside pytest.
 ```
 .venv-repro/bin/gltest --network studionet tests_integration -v -s
 ```
+
+## Transaction recovery update
+
+From `frontend/`, run `npm ci`, `npm test` and `npm run build`.
+`npm run verify:recovery` resumes the recorded public test transaction by
+reading `../evidence/recovery-pending.json`; it does not rebroadcast it.
+See `MILESTONE.md` for scope, evidence and verification limits.

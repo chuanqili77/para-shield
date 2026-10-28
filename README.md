@@ -119,3 +119,24 @@ the measurement trustworthy.
 - The contract fingerprint is not a cryptographic hash, and the
   summary wording of a verdict is stored as context only: consensus
   covers verdict and category, not prose.
+
+## Transaction safety and recovery
+
+A submitted transaction is saved per Stable Studionet contract. If tracking
+pauses, reload the same deployment and click **Resume pending transaction**;
+no wallet connection or repeat signature is needed to track it. A saved
+transaction blocks another write until its outcome is resolved.
+
+Success requires finality, successful execution, validator agreement and a
+read-back of the affected claim. A finalized receipt alone is insufficient.
+Failed reads retain the pending record. Incomplete receipts remain unresolved.
+Wallet or network changes require reconnection. Web Locks coordinate sends
+across tabs in the same browser profile; browsers without Web Locks can read
+the docket but cannot send.
+
+Keep the transaction ID shown after sending. Browser storage can be cleared
+or lost; a storage failure after broadcast retains an in-memory recovery
+record only while the page stays open. Cross-device sends are not coordinated.
+No private keys are stored by the application.
+
+See [MILESTONE.md](MILESTONE.md) for the baseline comparison and verification.

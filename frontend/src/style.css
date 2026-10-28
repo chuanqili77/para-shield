@@ -300,3 +300,6 @@ h2 {
 @media (prefers-reduced-motion: reduce) {
   .radar .sweep, .radar .blip, .stamp { animation: none; }
 }
+
+button:disabled { opacity: .5; cursor: wait; }
+#pending-note { overflow-wrap: anywhere; }

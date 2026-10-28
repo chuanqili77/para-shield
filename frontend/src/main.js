@@ -1,6 +1,10 @@
+import { getAddress } from "viem";
 import { createClient } from "genlayer-js";
 import { studionet } from "genlayer-js/chains";
 import "./style.css";
+import { ClaimRecovery, address, CHAIN_ID } from "./recovery.js";
+const recovery = new ClaimRecovery(localStorage);
+let walletRevision = 0;
 
 const DEFAULT_CONTRACT = import.meta.env.VITE_CONTRACT_ADDRESS || "";
 const EXPLORER = "https://explorer-studio.genlayer.com";
@@ -205,6 +209,7 @@ function renderFiltered() {
   list.querySelectorAll("[data-assess]").forEach((btn) => {
     btn.addEventListener("click", () => onAssess(btn.dataset.assess));
   });
+  updateRecovery();
 }
 
 function renderLedger() {
@@ -266,6 +271,7 @@ async function refreshList() {
     }
     renderLedger();
     renderFiltered();
+    updateRecovery();
   } catch (err) {
     list.innerHTML = "<p class='muted'>Could not load the docket.</p>";
     showError("Load failed: " + (err?.message || err));
@@ -282,33 +288,69 @@ async function ensureWallet() {
     account = accounts[0];
     $("wallet-btn").textContent = "Connected: " + short(account);
   }
-  client = createClient({ chain: studionet, account });
+  client = createClient({ chain: studionet, account, provider: window.ethereum });
   await client.connect("studionet");
   return client;
 }
 
-async function send(method, args) {
+function updateRecovery() {
+  let pending;
+  try {
+    pending = contractAddress ? recovery.pending(contractAddress) : null;
+    $("pending-note").textContent = pending
+      ? `Pending ${pending.method} · ${pending.claimId} · ${pending.hash}. Resume tracking; do not resubmit.`
+      : "No saved transaction for this contract.";
+  } catch (err) { $("pending-note").textContent = err.message; pending = true; }
+  document.querySelectorAll('#create-form button, [data-assess]').forEach(b => b.disabled = recovery.busy || !!pending);
+  $("resume-btn").disabled = recovery.busy || !pending;
+  document.querySelectorAll('#contract-form button, #contract-address, #wallet-btn, #refresh-btn').forEach(b => b.disabled = recovery.busy);
+}
+const waitForClaim = hash => readClient().waitForTransactionReceipt({
+  hash, status: "FINALIZED", interval: 3000, retries: 20, fullTransaction: true,
+});
+const readClaim = (target, id) => readClient().readContract({
+  address: getAddress(target), functionName: "get_claim", args: [id], transactionHashVariant: "latest-final",
+});
+async function runTrackedAction(action) {
   showError("");
-  const c = await ensureWallet();
-  setStage("sign");
-  setTx("Waiting for signature…");
-  const hash = await c.writeContract({
-    address: contractAddress,
-    functionName: method,
-    args,
-    value: BigInt(0),
+  try {
+    const promise = action();
+    updateRecovery();
+    const { tx } = await promise;
+    setStage("final");
+    setTx(`Execution and claim state verified: ${tx.hash}`, "ok", tx.hash);
+    await refreshList();
+  } catch (err) {
+    setStage("error");
+    showError((err?.message || String(err)) + " If a transaction was sent, resume tracking instead of sending again.");
+    throw err;
+  } finally { updateRecovery(); }
+}
+async function trackAction(action) {
+  if (!navigator.locks) throw Error("This browser cannot safely coordinate transactions. Use a current browser with Web Locks support.");
+  return navigator.locks.request(`parashield:${CHAIN_ID}:${address(contractAddress)}`, { ifAvailable: true }, async lock => {
+    if (!lock) throw Error("Another tab is handling this contract. Finish or resume there first.");
+    return runTrackedAction(action);
   });
-  setStage("sent");
-  setTx(`Sent: ${hash}. Waiting for validator consensus…`, "", hash);
-  setStage("consensus");
-  await c.waitForTransactionReceipt({
-    hash,
-    status: "FINALIZED",
-    interval: 3000,
-    retries: 200,
-  });
-  setStage("final");
-  setTx(`Sealed on-chain: ${hash}`, "ok", hash);
+}
+async function send(method, args) {
+  if (recovery.busy) throw Error("An action is already running.");
+  const target = address(contractAddress);
+  // Lock before opening the wallet prompt, including the account request.
+  return trackAction(() => recovery.submit(target, method, args, account || "", async () => {
+    const c = await ensureWallet();
+    const revision = walletRevision;
+    const [active] = await window.ethereum.request({ method: "eth_accounts" });
+    const chain = await window.ethereum.request({ method: "eth_chainId" });
+    if (revision !== walletRevision || active?.toLowerCase() !== account?.toLowerCase() || Number(chain) !== CHAIN_ID)
+      throw Error("Wallet changed or wrong network. Reconnect on Stable Studionet.");
+    setStage("sign");
+    setTx("Waiting for signature…");
+    const hash = await c.writeContract({ address: getAddress(target), functionName: method, args, value: 0n });
+    setStage("consensus");
+    setTx(`Submitted ${hash}. Keep this ID; resume if tracking pauses.`, "", hash);
+    return { hash, sender: active };
+  }, waitForClaim, readClaim));
 }
 
 async function onCreate(ev) {
@@ -324,10 +366,8 @@ async function onCreate(ev) {
   const s3 = $("f-s3").value.trim();
   try {
     await send("file_claim", [id, subject, eventDesc, policy, trigger, s1, s2, s3]);
-    await refreshList();
   } catch (err) {
     setStage("error");
-    setTx("");
     showError("Filing failed: " + (err?.message || err));
   }
 }
@@ -336,10 +376,8 @@ async function onAssess(cid) {
   if (!contractAddress) return showError("Set a contract address first.");
   try {
     await send("assess_claim", [cid]);
-    await refreshList();
   } catch (err) {
     setStage("error");
-    setTx("");
     showError("Assessment failed: " + (err?.message || err));
   }
 }
@@ -353,10 +391,13 @@ $("wallet-btn").addEventListener("click", async () => {
 });
 $("contract-form").addEventListener("submit", (ev) => {
   ev.preventDefault();
+  if (recovery.busy) return;
+  try { address($("contract-address").value.trim()); } catch (err) { return showError(err.message); }
   contractAddress = $("contract-address").value.trim();
   localStorage.setItem("ps_contract", contractAddress);
   $("explorer-link").href = EXPLORER + "/address/" + contractAddress;
   refreshList();
+  updateRecovery();
 });
 $("create-form").addEventListener("submit", onCreate);
 $("refresh-btn").addEventListener("click", refreshList);
@@ -370,6 +411,7 @@ document.querySelectorAll("[data-filter]").forEach((btn) => {
   });
 });
 $("demo-btn").addEventListener("click", () => {
+  if (recovery.busy) return;
   if (DEFAULT_CONTRACT) {
     contractAddress = DEFAULT_CONTRACT;
     localStorage.setItem("ps_contract", contractAddress);
@@ -377,6 +419,7 @@ $("demo-btn").addEventListener("click", () => {
     $("explorer-link").href = EXPLORER + "/address/" + contractAddress;
   }
   refreshList();
+  updateRecovery();
 });
 
 $("contract-address").value = contractAddress;
@@ -387,3 +430,17 @@ $("chain-note").textContent =
   "Stable Studionet · Chain ID 61999 · test network only, no real funds";
 startWeatherMap();
 refreshList();
+
+$("resume-btn").addEventListener("click", () => {
+  trackAction(() => recovery.resume(contractAddress, waitForClaim, readClaim)).catch(err => showError(err.message));
+});
+for (const event of ["accountsChanged", "chainChanged", "disconnect"]) {
+  window.ethereum?.on?.(event, () => {
+    walletRevision++;
+    account = null;
+    client = null;
+    $("wallet-btn").textContent = "Reconnect wallet";
+  });
+}
+window.addEventListener("storage", updateRecovery);
+updateRecovery();
