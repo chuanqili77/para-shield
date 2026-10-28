@@ -32,8 +32,7 @@ and its public methods are unchanged.
   This is a controlled client interruption, not evidence of a real RPC outage.
 - Browser wallet signing and cross-tab UI execution have not been verified
   live. Unit tests exercise the recovery engine; the network script exercises
-  the same engine against an actual transaction. Browser installation was
-  unavailable in the verification environment.
+  the same engine against an actual transaction. Browser wallet integration remains outside the network script.
 
 ## Reproduce the network check
 
@@ -53,3 +52,14 @@ changed wallet connections, and checks execution, validator agreement and the
 claim read-back before reporting success. Interrupted tracking resumes the
 original transaction without another signature or broadcast. Eleven regression
 tests and a finalized Stable Studionet recovery transaction document the change.
+
+## Published release
+
+- Source change: [710b1c8](https://github.com/chuanqili77/para-shield/commit/710b1c82487bcae860712e3ab78b734f9344bb00).
+- [Baseline comparison](https://github.com/chuanqili77/para-shield/compare/52a266727ba2609053544ae2e64eca0caa4b5d8a...710b1c82487bcae860712e3ab78b734f9344bb00).
+- [Live application](https://chuanqili77.github.io/para-shield/).
+- Pages release commit: `db03e01bfd91c7c59ed30c533eb32f7f1cc5cb1b`.
+- Browser read verification: the published recovery control is visible, and
+  the docket loads four real records, including `recovery-mvsfj809`, one
+  APPROVED verdict and one DENIED verdict. No personal wallet signing was
+  performed in the browser.

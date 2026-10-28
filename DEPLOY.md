@@ -56,8 +56,8 @@ filing claim `node-verify-mvr2p0w6`:
   `0x78bA239C1Cd949f32EFb4e4caeb3C7D0E2350356`.
 - Script: `frontend/scripts/verify-frontend-call.mjs`.
 
-The canonical contract therefore holds 3 claims (2 DECIDED + 1
-FILED). Browser MetaMask writes were not executed by the author;
+At the original frontend verification, the canonical contract held
+3 claims (2 DECIDED + 1 FILED). Browser MetaMask writes were not executed by the author;
 the same code path was verified with the throwaway account above.
 
 ## Demo site
@@ -82,3 +82,11 @@ claims, assesses both, and writes `evidence/studionet_assess.json`.
 It asserts only closed-set membership for verdicts and categories;
 the actual demo verdicts on the canonical instance are recorded in
 evidence, not forced by the test.
+
+## Transaction recovery release
+
+The transaction recovery frontend is published on the same demo URL.
+The docket now includes the additional synthetic recovery test claim
+`recovery-mvsfj809` (4 claims observed: 2 DECIDED and 2 FILED).
+See [MILESTONE.md](MILESTONE.md) for the source comparison and the
+[recovery evidence](evidence/recovery-studionet.json).

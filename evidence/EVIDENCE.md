@@ -77,7 +77,7 @@ claim wording was adjusted after seeing a verdict.
   `0x78bA239C1Cd949f32EFb4e4caeb3C7D0E2350356`.
 - Script: `frontend/scripts/verify-frontend-call.mjs`.
 
-The canonical contract holds 3 claims: 2 DECIDED + 1 FILED.
+At the original verification, the contract held 3 claims: 2 DECIDED + 1 FILED.
 
 ## Integration run
 
@@ -106,3 +106,12 @@ The canonical contract holds 3 claims: 2 DECIDED + 1 FILED.
   any point. All on-chain callers were gltest auto-generated test
   accounts or a discarded throwaway genlayer-js account.
 - No transaction was blindly resent. (None needed resending.)
+
+## Transaction recovery release
+
+The additional synthetic claim `recovery-mvsfj809` brings the observed docket
+to four records. Its single broadcast was interrupted at client tracking,
+then resumed and verified without another broadcast. The finalized receipt
+shows majority agreement, and the filed claim was read back successfully.
+See [recovery-studionet.json](recovery-studionet.json) and
+[the release comparison](../MILESTONE.md).
