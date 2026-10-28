@@ -42,16 +42,6 @@ again. Removing that record deliberately starts a fresh synthetic test claim
 with a newly generated test account. Do not use personal keys. The script never
 persists the generated key. It does not assess the synthetic claim.
 
-## Submission text
-
-ParaShield now supports durable transaction recovery and verified claim
-confirmation. The previous application lost tracking state on reload and
-reported success after finalization alone. The update stores pending writes
-per deployment, blocks repeated submissions, coordinates tabs, invalidates
-changed wallet connections, and checks execution, validator agreement and the
-claim read-back before reporting success. Interrupted tracking resumes the
-original transaction without another signature or broadcast. Eleven regression
-tests and a finalized Stable Studionet recovery transaction document the change.
 
 ## Published release
 
